@@ -32,6 +32,26 @@ public class DataContext : DbContext, IDataContext
     public IQueryable<TEntity> GetAll<TEntity>() where TEntity : class
         => base.Set<TEntity>();
 
+    public IQueryable<TEntity> GetActiveUsers<TEntity>() where TEntity : class
+    {
+        if (Users != null)
+        {
+            return Users.Where(User => User.IsActive.Equals(true)) as IQueryable<TEntity> ?? throw new InvalidOperationException();
+        }
+
+        return base.Set<TEntity>();
+    }
+
+    public IQueryable<TEntity> GetInactiveUsers<TEntity>() where TEntity : class
+    {
+        if (Users != null)
+        {
+            return Users.Where(User => User.IsActive.Equals(false)) as IQueryable<TEntity> ?? throw new InvalidOperationException();
+        }
+
+        return base.Set<TEntity>();
+    }
+
     public void Create<TEntity>(TEntity entity) where TEntity : class
     {
         base.Add(entity);
