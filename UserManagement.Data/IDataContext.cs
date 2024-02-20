@@ -13,6 +13,20 @@ public interface IDataContext
     IQueryable<TEntity> GetAll<TEntity>() where TEntity : class;
 
     /// <summary>
+    /// Get a list of active users
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <returns></returns>
+    IQueryable<TEntity> GetActiveUsers<TEntity>() where TEntity : class;
+
+    /// <summary>
+    /// Get a list of inactive users
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <returns></returns>
+    IQueryable<TEntity> GetInactiveUsers<TEntity>() where TEntity : class;
+
+    /// <summary>
     /// Create a new item
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
