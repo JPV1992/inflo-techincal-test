@@ -18,6 +18,7 @@ public class UsersController : Controller
             Id = p.Id,
             Forename = p.Forename,
             Surname = p.Surname,
+            DateOfBirth = p.DateOfBirth.ToString("dd/MM/yyyy"),
             Email = p.Email,
             IsActive = p.IsActive
         });
@@ -38,6 +39,7 @@ public class UsersController : Controller
             Id = p.Id,
             Forename = p.Forename,
             Surname = p.Surname,
+            DateOfBirth = p.DateOfBirth.ToString("dd/MM/yyyy"),
             Email = p.Email,
             IsActive = p.IsActive
         });
