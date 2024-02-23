@@ -12,6 +12,8 @@ public interface IDataContext
     /// <returns></returns>
     IQueryable<TEntity> GetAll<TEntity>() where TEntity : class;
 
+    IQueryable<TEntity> GetUserById<TEntity>(int id) where TEntity : class;
+
     /// <summary>
     /// Get a list of active users
     /// </summary>
