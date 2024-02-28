@@ -33,11 +33,6 @@ public class UserService : IUserService
 
     public IEnumerable<User> GetAll() => _dataAccess.GetAll<User>();
 
-    public IEnumerable<User> GetUserById(int id)
-    {
-        return _dataAccess.GetUserById<User>(id);
-    }
-
     public void Create(User user)
     {
         _dataAccess.Create(user);
@@ -46,6 +41,11 @@ public class UserService : IUserService
     public void Delete(User users)
     {
         _dataAccess.Delete(users);
+    }
+
+    public void Update(User user)
+    {
+        _dataAccess.Update(user);
     }
 
 }

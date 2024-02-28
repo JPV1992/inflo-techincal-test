@@ -33,16 +33,6 @@ public class DataContext : DbContext, IDataContext
     public IQueryable<TEntity> GetAll<TEntity>() where TEntity : class
         => base.Set<TEntity>();
 
-    public IQueryable<TEntity> GetUserById<TEntity>(int id) where TEntity : class
-    {
-        if(Users != null)
-        {
-            return Users.FirstOrDefault(User => User.Id == id) as IQueryable<TEntity> ?? throw new InvalidOperationException();
-        }
-
-        return base.Set<TEntity>();
-    }
-
     public IQueryable<TEntity> GetActiveUsers<TEntity>() where TEntity : class
     {
         if (Users != null)
