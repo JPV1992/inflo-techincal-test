@@ -43,7 +43,7 @@ public class UserService : IUserService
         _dataAccess.Create(user);
 }
 
-    public void Delete(IEnumerable<User> users)
+    public void Delete(User users)
     {
         _dataAccess.Delete(users);
     }

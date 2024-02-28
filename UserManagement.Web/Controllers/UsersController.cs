@@ -58,15 +58,44 @@ public class UsersController : Controller
 
     [HttpPost("Create")]
     public IActionResult Create([Bind("Forename,Surname,DateOfBirth,Email,IsActive")] User l)
-        {
+    {
         _userService.Create(l);
         return RedirectToAction("List");
     }
 
-    [HttpPost("Delete")]
-    public void Delete(int id)
+    [HttpGet("Delete")]
+    public ViewResult Delete(int id)
     {
-        var test = _userService.GetUserById(id);
-        _userService.Delete(test);
+        var users = _userService.GetAll();
+
+       var userToDelete = users.Select(p => new UserListItemViewModel
+        {
+            Id = p.Id,
+            Forename = p.Forename,
+            Surname = p.Surname,
+            DateOfBirth = p.DateOfBirth.ToString("dd/MM/yyyy"),
+            Email = p.Email,
+            IsActive = p.IsActive
+        }).FirstOrDefault(User => User.Id == id);
+
+        // Redirect to the list view
+        return View(userToDelete);
+    }
+
+    [HttpPost, ActionName("DeleteConfirmed")]
+    public IActionResult DeleteConfirmed(int id)
+    {
+        var users = _userService.GetAll();
+
+        var userToDelete = users.FirstOrDefault(User => User.Id == id);
+        if (userToDelete == null)
+        {
+            return NotFound();
+        }
+
+        _userService.Delete(userToDelete);
+
+        // Redirect to the list view
+        return RedirectToAction("List");
     }
 }

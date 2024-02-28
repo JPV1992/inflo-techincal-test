@@ -3,7 +3,7 @@ using UserManagement.Models;
 
 namespace UserManagement.Services.Domain.Interfaces;
 
-public interface IUserService 
+public interface IUserService
 {
     /// <summary>
     /// Return users by active state
@@ -14,5 +14,5 @@ public interface IUserService
     IEnumerable<User> GetAll();
     IEnumerable<User> GetUserById(int id);
     void Create(User user);
-    void Delete(IEnumerable<User> users);
+    void Delete(User users);
 }
