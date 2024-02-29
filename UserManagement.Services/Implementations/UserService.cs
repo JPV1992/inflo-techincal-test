@@ -32,4 +32,20 @@ public class UserService : IUserService
     }
 
     public IEnumerable<User> GetAll() => _dataAccess.GetAll<User>();
+
+    public void Create(User user)
+    {
+        _dataAccess.Create(user);
+}
+
+    public void Delete(User users)
+    {
+        _dataAccess.Delete(users);
+    }
+
+    public void Update(User user)
+    {
+        _dataAccess.Update(user);
+    }
+
 }
