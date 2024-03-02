@@ -13,6 +13,30 @@ public interface IDataContext
     IQueryable<TEntity> GetAll<TEntity>() where TEntity : class;
 
     /// <summary>
+    /// Create a new item
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <param name="entity"></param>
+    /// <returns></returns>
+    void Create<TEntity>(TEntity entity) where TEntity : class;
+
+    /// <summary>
+    /// Uodate an existing item
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <param name="entity"></param>
+    /// <returns></returns>
+    void Update<TEntity>(TEntity entity) where TEntity : class;
+
+    /// <summary>
+    /// Delete Item
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <typeparam name="TEntity"></typeparam>
+    void Delete<TEntity>(TEntity entity) where TEntity : class;
+
+    #region Users Methods
+    /// <summary>
     /// Get a list of active users
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
@@ -25,22 +49,6 @@ public interface IDataContext
     /// <typeparam name="TEntity"></typeparam>
     /// <returns></returns>
     IQueryable<TEntity> GetInactiveUsers<TEntity>() where TEntity : class;
+    #endregion
 
-    /// <summary>
-    /// Create a new item
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="entity"></param>
-    /// <returns></returns>
-    void Create<TEntity>(TEntity entity) where TEntity : class;
-
-    /// <summary>
-    /// Uodate an existing item matching the ID
-    /// </summary>
-    /// <typeparam name="TEntity"></typeparam>
-    /// <param name="entity"></param>
-    /// <returns></returns>
-    void Update<TEntity>(TEntity entity) where TEntity : class;
-
-    void Delete<TEntity>(TEntity entity) where TEntity : class;
 }

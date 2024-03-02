@@ -82,7 +82,7 @@ public class UsersController : Controller
         return View(userToDelete);
     }
 
-    [HttpPost, ActionName("DeleteConfirmed")]
+    [HttpDelete, ActionName("DeleteConfirmed")]
     public IActionResult DeleteConfirmed(int id)
     {
         var users = _userService.GetAll();
@@ -96,7 +96,7 @@ public class UsersController : Controller
         _userService.Delete(userToDelete);
 
         // Redirect to the list view
-        return RedirectToAction("List");
+        return Json(new { success = true });
     }
 
     [HttpGet("ViewDetails")]
