@@ -7,8 +7,8 @@ namespace UserManagement.Models;
 public class Logger
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; set; }
-    public int UserId { get; set; }
+    public long Id { get; set; }
+    public long UserId { get; set; }
     public string Action { get; set; } = default!;
     public DateTime Timestamp { get; set; }
 }

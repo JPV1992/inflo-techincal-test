@@ -12,7 +12,7 @@ public class LoggerListViewModel
 public class LoggerListItemViewModel
 {
     public long Id { get; set; }
-    public int UserId { get; set; }
+    public long UserId { get; set; }
     public string Action { get; set; } = default!;
     [Required(ErrorMessage = "Please add a timestamp")]
     [DataType(DataType.Date)]
