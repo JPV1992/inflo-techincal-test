@@ -2,7 +2,9 @@
 using System.Linq;
 using UserManagement.Models;
 using UserManagement.Services.Domain.Interfaces;
+using UserManagement.Web.Models;
 using UserManagement.Web.Models.Users;
+using UserManagement.Web.Models.Logs;
 
 namespace UserManagement.WebMS.Controllers;
 
@@ -10,8 +12,19 @@ namespace UserManagement.WebMS.Controllers;
 public class UsersController : Controller
 {
     private readonly IUserService _userService;
-    public UsersController(IUserService userService) => _userService = userService;
+    private readonly ILoggerService _loggerService;
+    public static readonly string CreateAction = "Create";
+    public static readonly string UpdateAction = "Update";
+    public static readonly string DeleteAction = "Delete";
 
+
+    public UsersController(IUserService userService, ILoggerService loggingService)
+    {
+        _userService = userService;
+        _loggerService = loggingService;
+    }
+
+    #region Actions
     [HttpGet]
     public ViewResult List()
     {
@@ -61,28 +74,24 @@ public class UsersController : Controller
     public IActionResult Create([Bind("Forename,Surname,DateOfBirth,Email,IsActive")] User userDetails)
     {
         _userService.Create(userDetails);
+        LogAction(CreateAction, userDetails.Id);
+        
         return RedirectToAction("List");
     }
 
     [HttpGet("Delete")]
     public IActionResult Delete(int id)
     {
-        var users = _userService.GetAll();
-
-       var userToDelete = users.Select(p => new UserListItemViewModel
+        var userToDelete = GetUserById(id);
+        if (userToDelete == null)
         {
-            Id = p.Id,
-            Forename = p.Forename,
-            Surname = p.Surname,
-            DateOfBirth = p.DateOfBirth.ToString("dd/MM/yyyy"),
-            Email = p.Email,
-            IsActive = p.IsActive
-        }).FirstOrDefault(User => User.Id == id);
+            return NotFound();
+        }
 
         return View(userToDelete);
     }
 
-    [HttpPost, ActionName("DeleteConfirmed")]
+    [HttpDelete, ActionName("DeleteConfirmed")]
     public IActionResult DeleteConfirmed(int id)
     {
         var users = _userService.GetAll();
@@ -94,49 +103,34 @@ public class UsersController : Controller
         }
 
         _userService.Delete(userToDelete);
+        LogAction(DeleteAction, id);
 
-        // Redirect to the list view
-        return RedirectToAction("List");
+        return Json(new { success = true });
     }
 
     [HttpGet("ViewDetails")]
     public IActionResult ViewDetails(int id)
     {
-        var users = _userService.GetAll();
-
-        var userToView = users.Select(p => new UserListItemViewModel
-        {
-            Id = p.Id,
-            Forename = p.Forename,
-            Surname = p.Surname,
-            DateOfBirth = p.DateOfBirth.ToString("dd/MM/yyyy"),
-            Email = p.Email,
-            IsActive = p.IsActive
-        }).FirstOrDefault(User => User.Id == id);
-
+        var userToView = GetUserById(id);
         if (userToView == null)
         {
             return NotFound();
         }
 
-        return View(userToView);
+        var userLogs = GetUserLogs(id);
+        var userDetails = new UserDetailsViewModel
+        {
+            User = userToView,
+            LogDetails = userLogs
+        };
+
+        return View(userDetails);
     }
 
     [HttpGet("EditUser")]
     public IActionResult EditUser(int id)
     {
-        var users = _userService.GetAll();
-
-        var userToEdit = users.Select(p => new UserListItemViewModel
-        {
-            Id = p.Id,
-            Forename = p.Forename,
-            Surname = p.Surname,
-            DateOfBirth = p.DateOfBirth.ToString("dd/MM/yyyy"),
-            Email = p.Email,
-            IsActive = p.IsActive
-        }).FirstOrDefault(User => User.Id == id);
-
+        var userToEdit = GetUserById(id);
         if (userToEdit == null)
         {
             return NotFound();
@@ -166,10 +160,55 @@ public class UsersController : Controller
             };
 
             _userService.Update(user);
+            LogAction(UpdateAction, id);
         }
 
         return RedirectToAction("List");
     }
+    #endregion
 
+    #region Private Methods
+    private UserListItemViewModel? GetUserById(int id)
+    {
+        var users = _userService.GetAll();
 
+       var userToView = users.Select(p => new UserListItemViewModel
+        {
+            Id = p.Id,
+            Forename = p.Forename,
+            Surname = p.Surname,
+            DateOfBirth = p.DateOfBirth.ToString("dd/MM/yyyy"),
+            Email = p.Email,
+            IsActive = p.IsActive
+        }).FirstOrDefault(User => User.Id == id);
+
+        return userToView;
+    }
+
+    private IEnumerable<LoggerListItemViewModel> GetUserLogs(int id)
+    {
+        var logs = _loggerService.GetAll();
+        var userLogs = logs.Where(p => p.UserId == id).Select(p => new LoggerListItemViewModel
+        {
+            Id = p.Id,
+            UserId = p.UserId,
+            Action = p.Action,
+            Timestamp = p.Timestamp.ToString("dd/MM/yyyy H:mm:ss")
+        });
+
+        return userLogs;
+    }
+
+    private void LogAction(string action, long userId)
+    {
+        var log = new Logger
+        {
+            UserId = userId,
+            Action = action,
+            Timestamp = DateTime.Now
+        };
+
+        _loggerService.Create(log);
+    }
+    #endregion
 }

@@ -1,47 +1,77 @@
-@model UserManagement.Web.Models.Users.UserListItemViewModel
+@model UserManagement.Web.Models.UserDetailsViewModel
 
 @{
     ViewData["Title"] = "User Details";
 }
-<h2>User Details</h2>
 
 <div>
     <h4>User</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Forename)
+            @Html.DisplayNameFor(model => model.User.Forename)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Forename)
+            @Html.DisplayFor(model => model.User.Forename)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Surname)
+            @Html.DisplayNameFor(model => model.User.Surname)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Surname)
+            @Html.DisplayFor(model => model.User.Surname)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.DateOfBirth)
+            @Html.DisplayNameFor(model => model.User.DateOfBirth)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.DateOfBirth)
+            @Html.DisplayFor(model => model.User.DateOfBirth)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
+            @Html.DisplayNameFor(model => model.User.Email)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Email)
+            @Html.DisplayFor(model => model.User.Email)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.IsActive)
+            @Html.DisplayNameFor(model => model.User.IsActive)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.IsActive)
+            @Html.DisplayFor(model => model.User.IsActive)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="EditUser" asp-route-id="@Model.Id">Edit</a>
-    <a asp-action="List">Back to List</a>
+    <a asp-controller="Users" asp-action="EditUser" asp-route-id="@Model.User.Id" class="btn btn-primary">Edit Details</a>
+    <a asp-controller="Users" asp-action="List" class="btn btn-primary">Back</a>
 </div>
+<hr />
+<div>
+   <h4>User Logs</h4>
+   @if (Model.LogDetails != null)
+   {
+       <table class="table table-striped">
+           <thead>
+               <tr>
+                   <th>UserId</th>
+                   <th>Action</th>
+                   <th>Timestamp</th>
+               </tr>
+           </thead>
+           <tbody>
+           @foreach (var log in Model.LogDetails)
+           {
+               <tr>
+                   <td>@log.UserId</td>
+                   <td>@log.Action</td>
+                   <td>@log.Timestamp</td>
+               </tr>
+           }
+           </tbody>
+       </table>
+   }
+   else
+   {
+       <p>No logs found for this user.</p>
+   }
+</div>
+

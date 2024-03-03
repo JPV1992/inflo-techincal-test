@@ -12,6 +12,6 @@ public class User
     public string Surname { get; set; } = default!;
     public string Email { get; set; } = default!;
     [DataType(DataType.Date)]
-    public DateTime DateOfBirth { get; set; } = default;
+    public DateTime DateOfBirth { get; set; }
     public bool IsActive { get; set; }
 }

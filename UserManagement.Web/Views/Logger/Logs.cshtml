@@ -1,0 +1,62 @@
+@model UserManagement.Web.Models.Logs.LoggerListViewModel
+
+@{
+    ViewData["Title"] = "Logs";
+}
+<h2>Logs</h2>
+
+<div class="table-responsive">
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>UserId</th>
+        <th>Action</th>
+        <th>Time</th>
+        <th style="width: 1px;"></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var log in Model.Logs)
+    {
+        <tr>
+            <td>
+                @log.Id
+            </td>
+            <td>
+                @log.UserId
+            </td>
+            <td>
+                @log.Action
+            </td>
+            <td>
+                @log.Timestamp
+            </td>
+            <td>
+                <button data-url="@Url.Action("Delete", "Logger", new { id = log.Id })" class="btn btn-primary float-end delete-log">Delete</button>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.delete-log').click(function() {
+            let url = $(this).data('url');
+
+            let userConfirmation = confirm('Are you sure you want to delete this log?');
+
+            if (userConfirmation) {
+                $.ajax({
+                    url: url,
+                    type: 'DELETE',
+                    success: function(result) {
+                        location.reload();
+                    }
+                });
+            }
+        });
+    });
+</script>
